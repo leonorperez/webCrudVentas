@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -21,72 +22,97 @@ import com.model.Cliente;
  */
 @WebServlet("/Cliente")
 public class ServletsCliente extends HttpServlet {
-	
+
 	private static final long serialVersionUID = 1L;
 	ClienteControlador controller = new ClienteControlador();
 	Gson gson = new Gson();
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public ServletsCliente() {
-        super();
-        // TODO Auto-generated constructor stub
-    }
 
 	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#HttpServlet()
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	public ServletsCliente() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+	/**
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
+	 *      response)
+	 */
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		PrintWriter salida = response.getWriter();
-		
-		String id=request.getParameter("id");
-		
+
+		String id = request.getParameter("id");
+
 		String data = gson.toJson(controller.getCliente(id));
 		JsonArray jsonArray = new JsonParser().parse(data).getAsJsonArray();
-		
-		
+
 		salida.print(jsonArray);
 
 	}
 
 	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
+	 *      response)
 	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		Cliente cliente = gson.fromJson(request.getReader(), Cliente.class);
 		PrintWriter salida = response.getWriter();
-		String mje="";
-		if(controller.registrar(cliente)) {
-			mje= "cliente registrado correctamente";
-		}else {
-			mje= "cliente no pudo ser registrado";
+		String mje = "";
+		if (controller.registrar(cliente)) {
+			mje = "cliente registrado correctamente";
+		} else {
+			mje = "cliente no pudo ser registrado";
 		}
 		salida.print(mje);
-		
+
 	}
 
 	/**
 	 * @see HttpServlet#doPut(HttpServletRequest, HttpServletResponse)
 	 */
-	protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+	protected void doPut(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		Cliente cliente = gson.fromJson(request.getReader(), Cliente.class);
+		PrintWriter salida = response.getWriter();
+		String mje = "";
+		List<Cliente> clientes = new ArrayList<Cliente>();
+		String id = cliente.getId() + "";
+		clientes = controller.getCliente(id);
+		
+		System.out.println(clientes.isEmpty());
+	
+		if (!clientes.isEmpty()) {			
+			if (controller.actualizar(cliente)) {
+				mje = "cliente modificado correctamente";
+			} else {
+				mje = "cliente no pudo ser modificado";
+			}
+
+		} else {
+			mje = "id invalido";
+		}
+		salida.print(mje);
 	}
 
 	/**
 	 * @see HttpServlet#doDelete(HttpServletRequest, HttpServletResponse)
 	 */
-	protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String id=request.getParameter("id");
+	protected void doDelete(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		String id = request.getParameter("id");
 		PrintWriter salida = response.getWriter();
-		String mje="";
-		if(controller.eliminar(id)) {
-			mje= "cliente borrado correctamente";
-		}else {
-			mje= "cliente no pudo ser borrado";
+		String mje = "";
+		if (controller.eliminar(id)) {
+			mje = "cliente borrado correctamente";
+		} else {
+			mje = "cliente no pudo ser borrado";
 		}
 		salida.print(mje);
-		
+
 	}
 
 }

@@ -21,9 +21,9 @@ public class ClienteControlador {
 			
 		}
 	//llama al DAO para actualizar un cliente
-	public void actualizar(Cliente cliente) {
+	public boolean actualizar(Cliente cliente) {
 		IClienteDao dao= new  ClienteDaoImplementacion();
-		dao.actualizar(cliente);
+		return dao.actualizarCliente(cliente);
 	}
 	
 	//llama al DAO para eliminar un cliente
