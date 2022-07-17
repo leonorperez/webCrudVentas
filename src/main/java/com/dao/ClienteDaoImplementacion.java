@@ -132,13 +132,13 @@ public class ClienteDaoImplementacion implements IClienteDao {
 	}
 
 	@Override
-	public boolean eliminar(Cliente cliente) {
+	public boolean eliminarById(String id) {
 		Connection connect= null;
 		Statement stm= null;
 		
 		boolean eliminar=false;
 				
-		String sql="DELETE FROM CLIENTES WHERE ID="+cliente.getId();
+		String sql="DELETE FROM CLIENTES WHERE ID="+ id;
 		try {
 			connect=Conexion.conectar();
 			stm=connect.createStatement();

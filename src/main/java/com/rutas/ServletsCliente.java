@@ -77,6 +77,15 @@ public class ServletsCliente extends HttpServlet {
 	 * @see HttpServlet#doDelete(HttpServletRequest, HttpServletResponse)
 	 */
 	protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		String id=request.getParameter("id");
+		PrintWriter salida = response.getWriter();
+		String mje="";
+		if(controller.eliminar(id)) {
+			mje= "cliente borrado correctamente";
+		}else {
+			mje= "cliente no pudo ser borrado";
+		}
+		salida.print(mje);
 		
 	}
 

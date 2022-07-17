@@ -27,9 +27,9 @@ public class ClienteControlador {
 	}
 	
 	//llama al DAO para eliminar un cliente
-	public void eliminar(Cliente cliente) {
-		IClienteDao dao= new  ClienteDaoImplementacion();
-		dao.eliminar(cliente);
+	public boolean eliminar(String id) {
+		IClienteDao dao= new  ClienteDaoImplementacion();		
+		return dao.eliminarById(id);
 	}
 	
 	//llama al DAO para obtener todos los clientes y luego los muestra en la vista
