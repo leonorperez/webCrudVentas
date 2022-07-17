@@ -1,7 +1,9 @@
-package com.inicializador;
+package com.rutas;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -9,19 +11,24 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import com.controller.*;
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonParser;
+import com.model.Cliente;
 
 /**
  * Servlet implementation class Routes
  */
-@WebServlet("/Routes")
-public class Routes extends HttpServlet {
+@WebServlet("/Cliente")
+public class ServletsCliente extends HttpServlet {
 	
 	private static final long serialVersionUID = 1L;
 	ClienteControlador controller = new ClienteControlador();
+	Gson gson = new Gson();
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public Routes() {
+    public ServletsCliente() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -31,18 +38,32 @@ public class Routes extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		PrintWriter salida = response.getWriter();		
-		salida.print(controller.getClientes());
+		PrintWriter salida = response.getWriter();
 		
-//		response.getWriter().append("Served at: ").append(request.getContextPath());
+		String id=request.getParameter("id");
+		
+		String data = gson.toJson(controller.getCliente(id));
+		JsonArray jsonArray = new JsonParser().parse(data).getAsJsonArray();
+		
+		
+		salida.print(jsonArray);
+
 	}
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		doGet(request, response);
+		Cliente cliente = gson.fromJson(request.getReader(), Cliente.class);
+		PrintWriter salida = response.getWriter();
+		String mje="";
+		if(controller.registrar(cliente)) {
+			mje= "cliente registrado correctamente";
+		}else {
+			mje= "cliente no pudo ser registrado";
+		}
+		salida.print(mje);
+		
 	}
 
 	/**
@@ -56,7 +77,7 @@ public class Routes extends HttpServlet {
 	 * @see HttpServlet#doDelete(HttpServletRequest, HttpServletResponse)
 	 */
 	protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+		
 	}
 
 }

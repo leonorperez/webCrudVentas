@@ -15,9 +15,10 @@ public class ClienteControlador {
 	}	
 	
 	//llama al DAO para guardar un cliente
-		public void registrar(Cliente cliente ) {
+		public boolean registrar(Cliente cliente ) {
 			IClienteDao dao= new  ClienteDaoImplementacion();
-			dao.registrar(cliente);
+			return dao.registrarCliente(cliente);
+			
 		}
 	//llama al DAO para actualizar un cliente
 	public void actualizar(Cliente cliente) {
@@ -36,7 +37,14 @@ public class ClienteControlador {
 		List<Cliente> clientes = new ArrayList<Cliente>();
 		IClienteDao dao= new  ClienteDaoImplementacion();
 		clientes=dao.obtener();
-//		vista.verClientes(clientes);
+
+		
+		return clientes;
+	}
+	public List<Cliente> getCliente(String id){
+		List<Cliente> clientes = new ArrayList<Cliente>();
+		IClienteDao dao= new  ClienteDaoImplementacion();
+		clientes=dao.obtenerUno(id);		
 		
 		return clientes;
 	}

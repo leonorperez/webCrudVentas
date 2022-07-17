@@ -16,8 +16,8 @@ import com.model.Cliente;
 public class ClienteDaoImplementacion implements IClienteDao {
 
 	@Override
-	public boolean registrar(Cliente cliente) {
-		boolean registrar = false;
+	public boolean registrarCliente(Cliente cliente) {
+		boolean mjeRegistro = false;
 		
 		Statement stm= null;
 		Connection con=null;
@@ -28,17 +28,17 @@ public class ClienteDaoImplementacion implements IClienteDao {
 			con=Conexion.conectar();
 			stm= con.createStatement();
 			stm.execute(sql);
-			registrar=true;
+			mjeRegistro=true;
 			stm.close();
 			con.close();
-			System.out.println("Registro");
+			
 			
 		} catch (SQLException e) {
 			System.out.println("Error: Clase ClienteDaoImple, método registrar");
 			e.printStackTrace();
 			System.out.println("entro al catch de registro");
 		}
-		return registrar;
+		return mjeRegistro;
 
 	}
 
@@ -63,7 +63,7 @@ public class ClienteDaoImplementacion implements IClienteDao {
 				c.setNombre(rs.getString(3));
 				c.setApellido(rs.getString(4));
 				listaCliente.add(c);
-			}
+			}			
 			stm.close();
 			rs.close();
 			co.close();
@@ -74,6 +74,41 @@ public class ClienteDaoImplementacion implements IClienteDao {
 		
 		return listaCliente;
 	}
+	
+	@Override
+	public List<Cliente> obtenerUno(String id) {
+		
+		Connection co =null;
+		Statement stm= null;
+		ResultSet rs=null;
+		
+		String sql="SELECT * FROM CLIENTES WHERE ID="+ id;
+		
+		List<Cliente> listaCliente= new ArrayList<Cliente>();
+		
+		try {			
+			co= Conexion.conectar();
+			stm=co.createStatement();
+			rs=stm.executeQuery(sql);
+			while (rs.next()) {
+				Cliente c= new Cliente();
+				c.setId(rs.getInt(1));
+				c.setCedula(rs.getString(2));
+				c.setNombre(rs.getString(3));
+				c.setApellido(rs.getString(4));
+				listaCliente.add(c);
+			}			
+			stm.close();
+			rs.close();
+			co.close();
+		} catch (SQLException e) {
+			System.out.println("Error: Clase ClienteDaoImple, método obtener");
+			e.printStackTrace();
+		}
+		
+		return listaCliente;
+	}
+
 
 
 	@Override
